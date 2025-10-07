@@ -1,0 +1,28 @@
+{
+  "private_master_ips": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string"
+      ]
+    ],
+    "value": [
+      "10.10.0.25"
+    ]
+  },
+  "private_worker_ips": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string",
+        "string"
+      ]
+    ],
+    "value": [
+      "10.20.0.33",
+      "10.30.0.25"
+    ]
+  }
+}

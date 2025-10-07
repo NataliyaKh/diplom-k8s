@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    yandex = {
+      source  = "yandex-cloud/yandex"
+      version = "~> 0.99"
+    }
+  }
+}
+
+
 provider "yandex" {
   service_account_key_file = var.sa_key_path
   cloud_id                 = var.cloud_id
@@ -23,7 +33,7 @@ locals {
       zone        = "ru-central1-a"
       subnet      = "subnet-a"
       cores       = 2
-      memory      = 4096
+      memory      = 4
       preemptible = false
     }
     worker1 = {
@@ -31,17 +41,25 @@ locals {
       zone        = "ru-central1-b"
       subnet      = "subnet-b"
       cores       = 2
-      memory      = 4096
+      memory      = 4
       preemptible = true
+      core_fraction = 20
     }
     worker2 = {
       hostname    = "worker2"
       zone        = "ru-central1-d"
       subnet      = "subnet-d"
       cores       = 2
-      memory      = 4096
+      memory      = 4
       preemptible = true
+      core_fraction = 20
+      platform_id = "standard-v3"
     }
+  }
+  subnets = {
+    subnet-a = data.yandex_vpc_subnet.subnet-a
+    subnet-b = data.yandex_vpc_subnet.subnet-b
+    subnet-d = data.yandex_vpc_subnet.subnet-d
   }
 }
 
@@ -49,7 +67,7 @@ resource "yandex_compute_instance" "vm" {
   for_each    = local.nodes
   name        = each.key
   hostname    = each.value.hostname
-  platform_id = "standard-v1"
+  platform_id = lookup(each.value, "platform_id", "standard-v1")
   zone        = each.value.zone
 
   resources {
@@ -69,7 +87,7 @@ resource "yandex_compute_instance" "vm" {
   }
 
   network_interface {
-    subnet_id = data.yandex_vpc_subnet[each.value.subnet].id
+    subnet_id = local.subnets[each.value.subnet].id
     nat       = true
   }
 
