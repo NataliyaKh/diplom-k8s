@@ -1,4 +1,30 @@
 {
+  "external_master_ips": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string"
+      ]
+    ],
+    "value": [
+      "51.250.12.79"
+    ]
+  },
+  "external_worker_ips": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string",
+        "string"
+      ]
+    ],
+    "value": [
+      "89.169.189.102",
+      "51.250.38.222"
+    ]
+  },
   "private_master_ips": {
     "sensitive": false,
     "type": [
@@ -8,7 +34,7 @@
       ]
     ],
     "value": [
-      "10.10.0.25"
+      "10.10.0.15"
     ]
   },
   "private_worker_ips": {
@@ -21,7 +47,7 @@
       ]
     ],
     "value": [
-      "10.20.0.33",
+      "10.20.0.9",
       "10.30.0.25"
     ]
   }

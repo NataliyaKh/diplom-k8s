@@ -7,15 +7,30 @@ terraform {
   }
 }
 
-
 provider "yandex" {
   service_account_key_file = var.sa_key_path
   cloud_id                 = var.cloud_id
   folder_id                = var.folder_id
 }
 
+data "terraform_remote_state" "infrastructure" {
+  backend = "s3"
+
+  config = {
+    bucket = "tf-state-nkh-d"
+    key    = "infrastructure.tfstate"
+    region = "ru-central1"
+    endpoints = {
+      s3 = "https://storage.yandexcloud.net"
+    }
+    skip_region_validation      = true
+    skip_credentials_validation = true
+    skip_requesting_account_id  = true
+  }
+}
+
 data "yandex_compute_image" "ubuntu" {
-  family = "ubuntu-2004-lts"
+  family = "ubuntu-2204-lts"
 }
 
 data "yandex_vpc_network" "main" {
@@ -89,6 +104,7 @@ resource "yandex_compute_instance" "vm" {
   network_interface {
     subnet_id = local.subnets[each.value.subnet].id
     nat       = true
+    security_group_ids = [data.terraform_remote_state.infrastructure.outputs.security_group_id]
   }
 
   metadata = {
