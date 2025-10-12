@@ -111,3 +111,4 @@ resource "yandex_compute_instance" "vm" {
     ssh-keys = "ubuntu:${file(var.ssh_public_key_path)}"
   }
 }
+
