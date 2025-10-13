@@ -1,0 +1,54 @@
+{
+  "external_master_ips": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string"
+      ]
+    ],
+    "value": [
+      "158.160.123.88"
+    ]
+  },
+  "external_worker_ips": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string",
+        "string"
+      ]
+    ],
+    "value": [
+      "89.169.176.11",
+      "84.252.132.37"
+    ]
+  },
+  "private_master_ips": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string"
+      ]
+    ],
+    "value": [
+      "10.10.0.26"
+    ]
+  },
+  "private_worker_ips": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string",
+        "string"
+      ]
+    ],
+    "value": [
+      "10.20.0.4",
+      "10.30.0.18"
+    ]
+  }
+}

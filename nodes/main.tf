@@ -76,6 +76,11 @@ locals {
     subnet-b = data.yandex_vpc_subnet.subnet-b
     subnet-d = data.yandex_vpc_subnet.subnet-d
   }
+  subnet_cidrs = {
+    subnet-a = data.terraform_remote_state.infrastructure.outputs.subnet_a_cidr
+    subnet-b = data.terraform_remote_state.infrastructure.outputs.subnet_b_cidr
+    subnet-d = data.terraform_remote_state.infrastructure.outputs.subnet_d_cidr
+  }
 }
 
 resource "yandex_compute_instance" "vm" {
