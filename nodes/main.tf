@@ -114,6 +114,7 @@ resource "yandex_compute_instance" "vm" {
 
   metadata = {
     ssh-keys = "ubuntu:${file(var.ssh_public_key_path)}"
+    enable-oslogin   = "false"
+    serial-port-enable = "0"
   }
 }
-
