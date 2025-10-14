@@ -12,5 +12,5 @@ variable "sa_key_path" {
 
 variable "ssh_public_key_path" {
   type    = string
-  default = "/root/.ssh/id_rsa.pub"
+  default = "/root/.ssh/id_ed25519.pub"
 }
