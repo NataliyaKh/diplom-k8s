@@ -2,7 +2,7 @@ terraform {
   required_providers {
     yandex = {
       source  = "yandex-cloud/yandex"
-      version = "~> 0.99"
+      version = "~> 0.156.0"
     }
   }
 }
@@ -26,6 +26,8 @@ data "terraform_remote_state" "infrastructure" {
     skip_region_validation      = true
     skip_credentials_validation = true
     skip_requesting_account_id  = true
+    skip_metadata_api_check     = true
+    use_path_style              = true
   }
 }
 
@@ -77,12 +79,6 @@ locals {
     subnet-b = data.yandex_vpc_subnet.subnet-b
     subnet-d = data.yandex_vpc_subnet.subnet-d
   }
-
-  subnet_cidrs = {
-    subnet-a = data.terraform_remote_state.infrastructure.outputs.subnet_a_cidr
-    subnet-b = data.terraform_remote_state.infrastructure.outputs.subnet_b_cidr
-    subnet-d = data.terraform_remote_state.infrastructure.outputs.subnet_d_cidr
-  }
 }
 
 resource "yandex_compute_instance" "vm" {
@@ -93,8 +89,8 @@ resource "yandex_compute_instance" "vm" {
   zone        = each.value.zone
 
   resources {
-    cores  = each.value.cores
-    memory = each.value.memory
+    cores         = each.value.cores
+    memory        = each.value.memory
     core_fraction = lookup(each.value, "core_fraction", 100)
   }
 
