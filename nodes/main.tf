@@ -15,14 +15,11 @@ provider "yandex" {
 
 data "terraform_remote_state" "infrastructure" {
   backend = "s3"
-
   config = {
-    bucket                     = "tf-state-nkh-d"
-    key                        = "infrastructure.tfstate"
-    region                     = "ru-central1"
-    endpoints = {
-      s3 = "https://storage.yandexcloud.net"
-    }
+    bucket                      = var.tfstate_bucket
+    key                         = var.tfstate_key
+    region                      = var.tfstate_region
+    endpoints                   = { s3 = "https://storage.yandexcloud.net" }
     skip_region_validation      = true
     skip_credentials_validation = true
     skip_requesting_account_id  = true
@@ -36,12 +33,16 @@ data "yandex_compute_image" "ubuntu" {
 }
 
 data "yandex_vpc_network" "main" {
-  name = "diplom-vpc"
+  name = var.vpc_name
 }
 
 data "yandex_vpc_subnet" "subnet-a" { name = "subnet-a" }
 data "yandex_vpc_subnet" "subnet-b" { name = "subnet-b" }
 data "yandex_vpc_subnet" "subnet-d" { name = "subnet-d" }
+
+data "yandex_vpc_security_group" "my_sg" {
+  name = var.security_group_name
+}
 
 locals {
   nodes = {
@@ -108,7 +109,7 @@ resource "yandex_compute_instance" "vm" {
   network_interface {
     subnet_id          = local.subnets[each.value.subnet].id
     nat                = true
-    security_group_ids = [data.terraform_remote_state.infrastructure.outputs.security_group_id]
+    security_group_ids = [data.yandex_vpc_security_group.my_sg.id]
   }
 
   metadata = {

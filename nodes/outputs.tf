@@ -25,3 +25,7 @@ output "external_worker_ips" {
     vm.network_interface[0].nat_ip_address if startswith(name, "worker")
   ]
 }
+
+output "registry_id" {
+  value = data.terraform_remote_state.infrastructure.outputs.registry_id
+}
